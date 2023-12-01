@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="../style.css">
+	</head>
+	<!--Coded With Love By Mutiullah Samim-->
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-5">
+					<div class="panel panel-primary">
+						<div class="panel-heading" id="accordion">
+							<span class="glyphicon glyphicon-comment"></span> Chat
+							<div class="btn-group pull-right">
+								<a type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</a>
+							</div>
+						</div>
+					<div class="panel-collapse collapse" id="collapseOne">
+						<div class="panel-body" id="messageBox">
+							
+						</div>
+						<div class="panel-footer">
+							<div class="input-group">
+								<input id="message" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+								<span class="input-group-btn">
+									<button class="btn btn-warning btn-sm" id="btn-chat" onclick="sendChat()">
+										Send
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io();
+			function sendChat(){
+				let message = $("#message").val();
+				
+				
+				if(message.length > 0){
+					let data = {
+							"senderId": "655749e497ef2c52c0793d4d",
+							"receiverId":"655749e497ef2c52c0793d4b",
+							"type":"single",
+							"lastMessage":message,
+							"socketId":"2tWt5"
+						}
+						socket.emit('message', data);
+						$("#messageBox").append(`<div class="floarRight">${message}</div>`);
+						$("#message").val("");
+				}
+				else{
+					console.log("Enter a valid msg :)");				
+					return false;
+				}
+			}
+
+			socket.on('message', function(msg){
+				console.log("msg--------->",msg)
+				$("#messageBox").append(`<div>${msg.lastMessage}</div>`);
+			});
+		</script>
+	</body>
+</html>
